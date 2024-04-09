@@ -31,6 +31,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
+    name: 'MAP MY WALK',
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
