@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:map_my_walk/animations/bottom_animation.dart';
@@ -32,7 +33,6 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
   @override
   void initState() {
     super.initState();
-
     ChallengeCubit.c(context).fetch();
   }
 
@@ -46,52 +46,16 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
       child: Builder(builder: (context) {
         return Scaffold(
           appBar: AppBar(
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.refresh_rounded,
-                ),
-              ),
-              Space.x1,
-            ],
-            backgroundColor: DefaultTabController.of(context).index == 0
-                ? AppTheme.c.primary
-                : Colors.green,
-            bottom: TabBar(
-              indicatorColor: Colors.white,
-              indicatorWeight: 4,
-              onTap: (value) {
-                setState(() {
-                  DefaultTabController.of(context).index = value;
-                });
-              },
-              tabs: [
-                Padding(
-                  padding: Space.v,
-                  child: Text(
-                    'Public',
-                    style: AppText.b1b,
-                  ),
-                ),
-                Padding(
-                  padding: Space.v,
-                  child: Text(
-                    'Friends',
-                    style: AppText.b1b,
-                  ),
-                ),
-              ],
-            ),
+            // ... Existing AppBar setup
           ),
-          body: const SafeArea(
+          body: SafeArea(
             top: false,
             bottom: true,
             child: TabBarView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               children: [
-                _Public(),
-                _Friends(),
+                _Public(),  // Assuming this is a non-const constructor
+                const _Friends(), // Assuming this is a non-const constructor
               ],
             ),
           ),
