@@ -1,66 +1,101 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:map_my_walk/animations/bottom_animation.dart';
-import 'package:map_my_walk/app_routes.dart';
-import 'package:map_my_walk/configs/app.dart';
-import 'package:map_my_walk/configs/app_dimensions.dart';
-import 'package:map_my_walk/configs/app_theme.dart';
-import 'package:map_my_walk/configs/app_typography.dart';
-import 'package:map_my_walk/configs/app_typography_ext.dart';
-import 'package:map_my_walk/configs/space.dart';
-import 'package:map_my_walk/cubits/challenge/cubit.dart';
-import 'package:map_my_walk/models/challenge.dart';
-import 'package:map_my_walk/utils/static_utils.dart';
-import 'package:map_my_walk/widgets/buttons/app_button.dart';
-import 'package:map_my_walk/widgets/cards/challenge_card.dart';
-import 'package:map_my_walk/widgets/dividers/app_dividers.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../widgets/text_fields/custom_text_field.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-part 'widgets/_public.dart';
-part 'widgets/_friends.dart';
+import '../create_challenge/create_challenge.dart';
 
-class ChallengesScreen extends StatefulWidget {
-  const ChallengesScreen({Key? key}) : super(key: key);
-
+class ChallengesPage extends StatelessWidget {
   @override
-  State<ChallengesScreen> createState() => _ChallengesScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Challenges'),
+        backgroundColor: Colors.deepPurpleAccent,
+          foregroundColor: Colors.white,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.deepPurpleAccent,
+        onPressed: () {
+          // Navigate to CreateChallengePage
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateChallengeScreen()),
+          );
+        },
+        child: Icon(Icons.add),
+        tooltip: 'Create Challenge',
+      ),
+      backgroundColor: Colors.deepPurpleAccent,
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('challenges').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error fetching challenges: ${snapshot.error}'));
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('No challenges found', style: TextStyle(color: Colors.white)));
+          }
+
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              DocumentSnapshot challenge = snapshot.data!.docs[index];
+              return ChallengeCard(data: challenge.data() as Map<String, dynamic>);
+            },
+          );
+        },
+      ),
+    );
+  }
 }
 
-class _ChallengesScreenState extends State<ChallengesScreen> {
-  @override
-  void initState() {
-    super.initState();
-    ChallengeCubit.c(context).fetch();
-  }
+class ChallengeCard extends StatelessWidget {
+  final Map<String, dynamic> data;
+
+  const ChallengeCard({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    App.init(context);
-    ScreenUtil.init(context, designSize: const Size(428, 926));
-
-    return DefaultTabController(
-      length: 2,
-      child: Builder(builder: (context) {
-        return Scaffold(
-          appBar: AppBar(
-            // ... Existing AppBar setup
-          ),
-          body: SafeArea(
-            top: false,
-            bottom: true,
-            child: TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
+    return Card(
+      margin: EdgeInsets.all(10),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              data['title'] ?? 'No Title',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.deepPurpleAccent,
+              ),
+            ),
+            SizedBox(height: 6),
+            Text(
+              data['description'] ?? 'No Description',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                _Public(),  // Assuming this is a non-const constructor
-                const _Friends(), // Assuming this is a non-const constructor
+                Text(
+                  '${data['points'] ?? 0} pts',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                ),
               ],
             ),
-          ),
-        );
-      }),
+          ],
+        ),
+      ),
     );
   }
 }

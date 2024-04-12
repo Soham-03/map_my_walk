@@ -13,6 +13,7 @@ import 'package:map_my_walk/screens/fitness_tip/fitness_tip.dart';
 import 'package:map_my_walk/screens/home/home.dart';
 import 'package:map_my_walk/screens/leader_board/leader_board.dart';
 import 'package:map_my_walk/screens/login/login.dart';
+import 'package:map_my_walk/screens/profile/profile.dart';
 import 'package:map_my_walk/screens/register/register.dart';
 import 'package:map_my_walk/screens/splash/splash.dart';
 import 'package:map_my_walk/screens/track_completed/track_completed.dart';
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Map My Walk',
+        title: 'Fit Quest',
         theme: theme.themeLight,
         initialRoute: AppRoutes.splash,
         localizationsDelegates: const [
@@ -72,10 +73,11 @@ class MyApp extends StatelessWidget {
           AppRoutes.home: (context) => const HomeScreen(),
           AppRoutes.login: (context) => const LoginScreen(),
           AppRoutes.register: (context) => const RegisterScreen(),
-          AppRoutes.challenges: (context) => const ChallengesScreen(),
+          AppRoutes.challenges: (context) => ChallengesPage(),
           AppRoutes.fitnessTip: (context) => const FitnessTipScreen(),
           AppRoutes.createChallenge: (context) => const CreateChallengeScreen(),
           AppRoutes.challengeDetail: (context) => const ChallengeDetailScreen(),
+          AppRoutes.profile: (context) => ProfilePage()
         },
       ),
     );

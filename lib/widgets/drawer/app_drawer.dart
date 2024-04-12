@@ -23,7 +23,7 @@ class AppDrawer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Map My Walk',
+                'Fit Quest',
                 style: AppText.h1b.copyWith(
                   color: Colors.white,
                   fontSize: AppDimensions.font(18),
