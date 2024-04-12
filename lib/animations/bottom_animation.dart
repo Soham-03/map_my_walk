@@ -32,7 +32,7 @@ class AnimatorState extends State<Animator> with SingleTickerProviderStateMixin 
       curve: Curves.easeInOut,
     );
     timer = Timer(widget.time!, () {
-      if (mounted) {
+      if (mounted && animationController != null && !animationController!.isAnimating) {
         animationController!.forward();
       }
     });

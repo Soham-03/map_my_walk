@@ -40,7 +40,7 @@ class AppDrawer extends StatelessWidget {
                   'My Profile',
                   style: AppText.h2.cl(Colors.white),
                 ),
-                onTap: () {},
+                onTap: () => Navigator.pushNamed(context, AppRoutes.profile),
               ),
               ListTile(
                 minLeadingWidth: 20,
