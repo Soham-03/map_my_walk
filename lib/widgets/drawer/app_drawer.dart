@@ -45,14 +45,14 @@ class AppDrawer extends StatelessWidget {
               ListTile(
                 minLeadingWidth: 20,
                 leading: const Icon(
-                  Icons.settings_outlined,
+                  Icons.leaderboard_outlined,
                   color: Colors.white,
                 ),
                 title: Text(
-                  'Settings',
+                  'Leaderboard',
                   style: AppText.h2.cl(Colors.white),
                 ),
-                onTap: () {},
+                onTap: () =>Navigator.pushNamed(context, AppRoutes.leaderBoard),
               ),
               const Divider(
                 color: Colors.white,

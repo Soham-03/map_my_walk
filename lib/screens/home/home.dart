@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                       state: state,
                     ),
                     const Expanded(
-                      child: WeeklyChart(),
+                      child: ChallengesChart(),
                     )
                   ],
                 );

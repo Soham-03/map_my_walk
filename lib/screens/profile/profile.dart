@@ -81,6 +81,7 @@ class ProfilePage extends StatelessWidget {
                 var gender = userDoc['gender'] as String;
                 var height = userDoc['height'].toString();
                 var weight = userDoc['weight'].toString();
+                var points = userDoc['points'].toString();
 
                 return Column(
                   children: [
@@ -103,6 +104,7 @@ class ProfilePage extends StatelessWidget {
                     UserInfoRow(title: 'Gender', value: gender),
                     UserInfoRow(title: 'Height', value: '$height cm'),
                     UserInfoRow(title: 'Weight', value: '$weight kg'),
+                    UserInfoRow(title: 'Points', value: '$points'),
                     SizedBox(height: 20),
                   ],
                 );

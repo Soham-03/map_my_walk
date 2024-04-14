@@ -196,7 +196,7 @@ class _FitnessTipScreenState extends State<FitnessTipScreen> {
                 children: <Widget>[
                   Text('Diet recommender', style: Theme.of(context).textTheme.headline4),
                   SizedBox(height: 10),
-                  Text('Get one of the best diets from our best machine learning models to keep you in shape!', style: Theme.of(context).textTheme.displaySmall),
+                  Text('Get one of the best diets from our best machine learning models to keep you in shape!', style: Theme.of(context).textTheme.bodySmall),
                   SizedBox(height: 10),
                   CustomTextField(
                     name: 'age',

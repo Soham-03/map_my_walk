@@ -60,7 +60,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
         width: 5,
         endCap: Cap.roundCap,
         polylineId: polyID,
-        color: Colors.red,
+        color: Colors.purpleAccent,
         points: polylineCoordinates,
       );
 
@@ -71,6 +71,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
         markers[userMarker] = Marker(
             markerId: userMarker,
             position: LatLng(userLocation.latitude, userLocation.longitude),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
             onTap: () {});
       });
       final GoogleMapController controller = await _controller.future;
@@ -94,7 +95,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
             await MapUtils.getStepCount(
                 userLocationProvider.userLocation!, data),
             data.speed!);
-        if(userSteps == 0){
+        if(userSteps == challengeSteps){
           print(points.toString());
           //challenge completed
           Fluttertoast.showToast(msg: "Challenge Completed");
