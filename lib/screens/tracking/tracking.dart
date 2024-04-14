@@ -95,7 +95,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
             await MapUtils.getStepCount(
                 userLocationProvider.userLocation!, data),
             data.speed!);
-        if(userSteps == challengeSteps){
+        if(userSteps == 0){
           print(points.toString());
           //challenge completed
           Fluttertoast.showToast(msg: "Challenge Completed");
