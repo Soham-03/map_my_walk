@@ -44,25 +44,22 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-      apiKey: "AIzaSyBfq8do7QgxgCUQrZRxecCsjK2JHkPMJB8",
-      authDomain: "smartfarm-325bd.firebaseapp.com",
-      projectId: "smartfarm-325bd",
-      storageBucket: "smartfarm-325bd.appspot.com",
-      messagingSenderId: "471539173048",
-      appId: "1:471539173048:web:1ba174cb3cc3acb5de564d",
-      measurementId: "G-CGH6MX87Z4"
+      apiKey: "AIzaSyAda7U3bjiwREP-x_aV1JJr_MPx6oL2wu4",
+      authDomain: "fitquest-ee88f.firebaseapp.com",
+      projectId: "fitquest-ee88f",
+      storageBucket: "fitquest-ee88f.appspot.com",
+      messagingSenderId: "918407456616",
+      appId: "1:918407456616:web:924a8660b3b07adeacd8dd"
 
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-      apiKey: "AIzaSyBfq8do7QgxgCUQrZRxecCsjK2JHkPMJB8",
-      authDomain: "smartfarm-325bd.firebaseapp.com",
-      projectId: "smartfarm-325bd",
-      storageBucket: "smartfarm-325bd.appspot.com",
-      messagingSenderId: "471539173048",
-      appId: "1:471539173048:web:1ba174cb3cc3acb5de564d",
-      measurementId: "G-CGH6MX87Z4"
-
+      apiKey: "AIzaSyAda7U3bjiwREP-x_aV1JJr_MPx6oL2wu4",
+      authDomain: "fitquest-ee88f.firebaseapp.com",
+      projectId: "fitquest-ee88f",
+      storageBucket: "fitquest-ee88f.appspot.com",
+      messagingSenderId: "918407456616",
+      appId: "1:918407456616:web:924a8660b3b07adeacd8dd"
   );
 
   static const FirebaseOptions ios = FirebaseOptions(

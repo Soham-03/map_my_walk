@@ -1,35 +1,13 @@
 {
   "project_info": {
-    "project_number": "471539173048",
-    "project_id": "smartfarm-325bd",
-    "storage_bucket": "smartfarm-325bd.appspot.com"
+    "project_number": "918407456616",
+    "project_id": "fitquest-ee88f",
+    "storage_bucket": "fitquest-ee88f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:471539173048:android:b5fff79395ff84f0de564d",
-        "android_client_info": {
-          "package_name": "com.example.smartfarm"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyARGlD_7NCAQNaUgYwgyHIF9Llnj0LHRjY"
-        },
-        {
-          "current_key": "AIzaSyAtesy4huudlPiFsUT7wI_NLk1BnCT8ieg"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:471539173048:android:7fb796558bd52abdde564d",
+        "mobilesdk_app_id": "1:918407456616:android:8917e3b036706fbdacd8dd",
         "android_client_info": {
           "package_name": "com.usamamuzaffar.map_my_walk"
         }
@@ -37,10 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyARGlD_7NCAQNaUgYwgyHIF9Llnj0LHRjY"
-        },
-        {
-          "current_key": "AIzaSyAtesy4huudlPiFsUT7wI_NLk1BnCT8ieg"
+          "current_key": "AIzaSyDXuTo0Wl2o7YAkvR4ItLw2OHXf9RWwL-Y"
         }
       ],
       "services": {
