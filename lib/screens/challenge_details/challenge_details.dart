@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';  // Import FirebaseAuth
 import 'package:map_my_walk/app_routes.dart';
-
 import '../tracking/tracking.dart';
 
 class ChallengeDetailsScreen extends StatelessWidget {
   final String challengeId;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;  // Firebase Auth instance for user identification
 
   ChallengeDetailsScreen({required this.challengeId});
 
   @override
   Widget build(BuildContext context) {
+    User? currentUser = _auth.currentUser;  // Get the current logged-in user
     return Scaffold(
       appBar: AppBar(
-        title: Text('Challenge Details'),
+        title: const Text('Challenge Details'),
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: _firestore.collection('challenges').doc(challengeId).get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData) {
-            return Center(child: Text('Challenge details not found.'));
+            return const Center(child: Text('Challenge details not found.'));
           }
           var data = snapshot.data?.data() as Map<String, dynamic>;
           var steps = data['steps'];
@@ -35,23 +37,39 @@ class ChallengeDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(data['title'], style: Theme.of(context).textTheme.headline5),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(data['description'], style: Theme.of(context).textTheme.subtitle1),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text('Points: ${data['points']}'),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text('Steps: ${data['steps']}'),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TrackingScreen(steps: steps.toString(), points: points.toString(),),
-                        ),
-                      );
+                      if (currentUser != null) {
+                        // Add challengeId to participatedChallenges array in user's document
+                        DocumentReference userDocRef = _firestore.collection('users').doc(currentUser.uid);
+                        userDocRef.update({
+                          "participatedChallenges": FieldValue.arrayUnion([challengeId])
+                        }).then((_) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TrackingScreen(steps: steps.toString(), points: points.toString()),
+                            ),
+                          );
+                        }).catchError((error) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Error starting challenge: $error'))
+                          );
+                        });
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('You are not logged in'))
+                        );
+                      }
                     },
-                    child: Text('Start Tracking'),
+                    child: const Text('Start Tracking'),
                   ),
                 ],
               ),
