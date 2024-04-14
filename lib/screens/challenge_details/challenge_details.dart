@@ -27,6 +27,7 @@ class ChallengeDetailsScreen extends StatelessWidget {
           }
           var data = snapshot.data?.data() as Map<String, dynamic>;
           var steps = data['steps'];
+          var points = data['points'];
           return SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(16.0),
@@ -46,7 +47,7 @@ class ChallengeDetailsScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TrackingScreen(steps: steps.toString()),
+                          builder: (context) => TrackingScreen(steps: steps.toString(), points: points.toString(),),
                         ),
                       );
                     },

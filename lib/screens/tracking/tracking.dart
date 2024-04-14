@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:map_my_walk/configs/app_typography_ext.dart';
@@ -18,11 +19,13 @@ import '../../providers/user_location.dart';
 import '../../utils/map_utils.dart';
 import '../../widgets/circular_back_button.dart';
 import '../../widgets/primary_button.dart';
+import '../track_completed/track_completed.dart';
 part 'widgets/bottom_bar.dart';
 
 class TrackingScreen extends StatefulWidget {
   final String steps; // Accept steps as a String
-  const TrackingScreen({Key? key, required this.steps}) : super(key: key);
+  final String points;
+  const TrackingScreen({Key? key, required this.steps, required this.points}) : super(key: key);
 
   @override
   State<TrackingScreen> createState() => _TrackingScreenState();
@@ -42,6 +45,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
   double bottomPadding = 80;
   int userSteps = 0;
   int challengeSteps = 0;
+  int points = 0;
   setupMarkerAndCircle(LatLng userLocation) async {
     try {
       lastKnownLocation = userLocation;
@@ -90,6 +94,35 @@ class _TrackingScreenState extends State<TrackingScreen> {
             await MapUtils.getStepCount(
                 userLocationProvider.userLocation!, data),
             data.speed!);
+        if(userSteps == 0){
+          print(points.toString());
+          //challenge completed
+          Fluttertoast.showToast(msg: "Challenge Completed");
+          if (stream != null) {
+            app.setDistanceTraveled(
+              MapUtils.getDistance(
+                userLocationProvider.userLocation!,
+                lastKnownLocation,
+              ),
+            );
+
+            userLocationProvider.userLocation = lastKnownLocation;
+            app.setPolyCoordinates(polylineCoordinates);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TrackCompletedScreen(points: points.toString()),
+              ),
+            );
+            await stream!.cancel().then((value) =>
+                Navigator.pushReplacementNamed(
+                    context, AppRoutes.trackCompleted));
+          } else {
+            polylines = {};
+            startListeningToUserLocation();
+          }
+
+        }
 
         setupMarkerAndCircle(LatLng(data.latitude!, data.longitude!));
       });
@@ -105,6 +138,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
   void initState() {
     super.initState();
     challengeSteps = int.parse(widget.steps);
+    points = int.parse(widget.points);
   }
 
   @override

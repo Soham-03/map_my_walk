@@ -65,9 +65,8 @@ class MyApp extends StatelessWidget {
         ],
         routes: {
           AppRoutes.splash: (context) => const SplashScreen(),
-          AppRoutes.tracking: (context) => const TrackingScreen(steps: '',),
+          AppRoutes.tracking: (context) => const TrackingScreen(steps: '', points: '',),
           AppRoutes.dashboard: (context) => const DashboardScreen(),
-          AppRoutes.trackCompleted: (context) => const TrackCompletedScreen(),
           AppRoutes.leaderBoard: (context) => const LeaderBoardScreen(),
           AppRoutes.baseScreen: (context) => const BaseScreen(),
           AppRoutes.home: (context) => const HomeScreen(),
