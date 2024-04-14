@@ -46,7 +46,7 @@ class ProfilePage extends StatelessWidget {
                 var height = userDoc['height'].toString();
                 var weight = userDoc['weight'].toString();
                 var points = userDoc['points'].toString();
-                List<dynamic> participatedChallenges = userDoc['participatedChallenges'] ?? [];
+                Map<String, dynamic> participatedChallenges = userDoc['participatedChallenges'] as Map<String, dynamic>? ?? {};
 
                 return Column(
                   children: [
@@ -66,10 +66,11 @@ class ProfilePage extends StatelessWidget {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: participatedChallenges.length,
+                      itemCount: participatedChallenges.keys.length,
                       itemBuilder: (context, index) {
+                        String challengeId = participatedChallenges.keys.elementAt(index);
                         return FutureBuilder<DocumentSnapshot>(
-                          future: FirebaseFirestore.instance.collection('challenges').doc(participatedChallenges[index]).get(),
+                          future: FirebaseFirestore.instance.collection('challenges').doc(challengeId).get(),
                           builder: (context, challengeSnapshot) {
                             if (challengeSnapshot.connectionState == ConnectionState.waiting) {
                               return Center(child: CircularProgressIndicator());

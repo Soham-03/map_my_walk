@@ -21,32 +21,56 @@ class _DashGaugeState extends State<DashGauge> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late Future<int> _targetSteps;
+  late int _currentSteps = 0;  // Initial current steps state
 
   @override
   void initState() {
     super.initState();
     _targetSteps = _fetchRecentChallengeSteps();
+    _initializeCurrentSteps();
   }
+
+  Future<void> _initializeCurrentSteps() async {
+    User? currentUser = _auth.currentUser;
+    if (currentUser != null) {
+      DocumentSnapshot userDoc = await _firestore.collection('users').doc(currentUser.uid).get();
+      Map<String, dynamic> participatedChallenges = userDoc['participatedChallenges'] as Map<String, dynamic>? ?? {};
+      var activeChallengeEntry = participatedChallenges.entries.firstWhere(
+            (entry) => entry.value['status'] == true,
+        orElse: () => MapEntry('', {'steps': '0'}),
+      );
+      String challengeId = activeChallengeEntry.key;
+      var _steps = participatedChallenges[challengeId];
+      _currentSteps = _steps["steps"];
+      print(":$_currentSteps");
+    }
+  }
+
   Future<int> _fetchRecentChallengeSteps() async {
     User? currentUser = _auth.currentUser;
-    if (currentUser == null) return 0; // Return zero if not logged in
+    if (currentUser == null) return 0;
 
     DocumentSnapshot userDoc = await _firestore.collection('users').doc(currentUser.uid).get();
-    List<dynamic> participatedChallenges = userDoc['participatedChallenges'];
-    if (participatedChallenges.isEmpty) return 0; // Return zero if no challenges
+    Map<String, dynamic> participatedChallenges = userDoc['participatedChallenges'] as Map<String, dynamic>? ?? {};
 
-    // Fetch the most recent challenge details using the last element of participatedChallenges array
-    String recentChallengeId = participatedChallenges.last as String;  // Explicitly cast as String
-    DocumentSnapshot challengeDoc = await _firestore.collection('challenges').doc(recentChallengeId).get();
-    ()challengeDoc{
+    var activeChallengeEntry = participatedChallenges.entries.firstWhere(
+          (entry) => entry.value['status'] == true,
+      orElse: () => MapEntry('', {'steps': '0'}),
+    );
+
+    if (activeChallengeEntry.key.isEmpty) {
+      return 0;
+    }
+
+    String challengeId = activeChallengeEntry.key;
+    DocumentSnapshot challengeDoc = await _firestore.collection('challenges').doc(challengeId).get();
     if (challengeDoc.exists) {
-      int steps = challengeDoc['steps'];
+      int steps = int.parse(challengeDoc['steps'].toString());
       return steps;
     }
 
-    return 0; // Return zero if challenge details not found or no 'steps' field
+    return 0;
   }
-
 
   final CircularSliderAppearance gaugeAppearance = CircularSliderAppearance(
     customWidths: CustomSliderWidths(
@@ -74,9 +98,9 @@ class _DashGaugeState extends State<DashGauge> {
           return CircularProgressIndicator();
         }
 
-        if (!snapshot.hasData || snapshot.data == 0) {
-          return Center(child: Text("No active challenges"));
-        }
+        // if (!snapshot.hasData || snapshot.data == 0) {
+        //   return Center(child: Text("No active challenges"));
+        // }
 
         int maxSteps = snapshot.data!;
         return IgnorePointer(
@@ -91,7 +115,7 @@ class _DashGaugeState extends State<DashGauge> {
                     ),
                     Countup(
                         begin: 0,
-                        end: maxSteps.toDouble(),
+                        end: _currentSteps.toDouble(),
                         duration: const Duration(seconds: 1),
                         separator: ',',
                         style: AppText.h1b.cl(AppTheme.c.primary).copyWith(fontSize: 24)),
@@ -110,7 +134,7 @@ class _DashGaugeState extends State<DashGauge> {
             appearance: gaugeAppearance,
             min: 0,
             max: maxSteps.toDouble(),
-            initialValue: maxSteps.toDouble(),
+            initialValue: _currentSteps.toDouble(),  // Use the local state for the initial value
           ),
         );
       },

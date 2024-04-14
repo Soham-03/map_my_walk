@@ -38,7 +38,7 @@ class MyAppBar extends StatelessWidget {
                   radius: 15,
                   backgroundColor: Colors.grey[200],
                   backgroundImage: const NetworkImage(
-                      "https://avatars.githubusercontent.com/u/101565812?v=4"),
+                      "https://em-content.zobj.net/source/microsoft/379/woman_1f469.png"),
                 ),
               ),
             ),
@@ -60,7 +60,7 @@ class MyAppBar extends StatelessWidget {
             delay: const Duration(milliseconds: 200),
             slidingBeginOffset: const Offset(-10, 0),
             child: Text(
-              "6",
+              "3",
               style: AppText.h3bm.cl(AppTheme.c.primaryDark!),
             ),
           ),
@@ -81,7 +81,7 @@ class MyAppBar extends StatelessWidget {
             delay: const Duration(milliseconds: 100),
             slidingBeginOffset: const Offset(-10, 0),
             child: Text(
-              "12",
+              "1st",
               style: AppText.h3bm.cl(AppTheme.c.primaryDark!),
             ),
           ),

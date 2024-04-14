@@ -151,7 +151,8 @@ import 'widgets/stats_card.dart';
 
 class TrackCompletedScreen extends StatelessWidget {
   final String points;
-  const TrackCompletedScreen({Key? key, required this.points}) : super(key: key);
+  final String flag;
+  const TrackCompletedScreen({Key? key, required this.points, required this.flag}) : super(key: key);
 
   Future<void> updatePoints(BuildContext context) async {
 
@@ -159,7 +160,30 @@ class TrackCompletedScreen extends StatelessWidget {
       User? user = FirebaseAuth.instance.currentUser;
       var firestore = FirebaseFirestore.instance;
       DocumentReference docRef = firestore.collection('users').doc(user?.uid);
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      var _firestore = FirebaseFirestore.instance;
+      if (currentUser == null) {
+        throw Exception("User not logged in");
+      }
 
+      String userId = currentUser.uid;
+      DocumentSnapshot userDoc = await _firestore.collection('users').doc(userId).get();
+      Map<String, dynamic> participatedChallenges = userDoc['participatedChallenges'] as Map<String, dynamic>? ?? {};
+
+      // Find the active challenge
+      var activeChallengeEntry = participatedChallenges.entries.firstWhere(
+            (entry) => entry.value['status'] == true,
+        orElse: () => MapEntry('', {'steps': '0'}),
+      );
+
+      if (activeChallengeEntry.key.isEmpty) {
+        throw Exception("No active challenge found");
+      }
+      await _firestore.collection('users').doc(userId).update({
+        'participatedChallenges.${activeChallengeEntry.key}.status': false
+      }).catchError((error) {
+        throw Exception("Failed to update challenge status: $error");
+      });
       FirebaseFirestore.instance.runTransaction((transaction) async {
         DocumentSnapshot snapshot = await transaction.get(docRef);
         if (!snapshot.exists) {
@@ -179,6 +203,48 @@ class TrackCompletedScreen extends StatelessWidget {
     }
   }
 
+  Future<void> updateStepsInActiveChallenge(int newSteps, BuildContext context) async {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    var _firestore = FirebaseFirestore.instance;
+    if (currentUser == null) {
+      throw Exception("User not logged in");
+    }
+
+    String userId = currentUser.uid;
+    DocumentSnapshot userDoc = await _firestore.collection('users').doc(userId).get();
+    Map<String, dynamic> participatedChallenges = userDoc['participatedChallenges'] as Map<String, dynamic>? ?? {};
+
+    // Find the active challenge
+    var activeChallengeEntry = participatedChallenges.entries.firstWhere(
+          (entry) => entry.value['status'] == true,
+      orElse: () => MapEntry('', {'steps': '0'}),
+    );
+
+    if (activeChallengeEntry.key.isEmpty) {
+      throw Exception("No active challenge found");
+    }
+    var app = AppProvider();
+    String challengeId = activeChallengeEntry.key;
+    var _steps = participatedChallenges[challengeId];
+    var stepsgg = _steps["steps"];
+    newSteps = stepsgg.toInt() + int.parse(app.getUserStepCount.toString());
+    // newSteps =  stepsgg.toInt() + ;
+    // Update steps in the active challenge
+    // await _firestore.collection('challenges').doc(challengeId).update({
+    //   'steps': newSteps.toString()
+    // }).catchError((error) {
+    //   throw Exception("Failed to update steps: $error");
+    // });
+    await _firestore.collection('users').doc(userId).update({
+      'participatedChallenges.${activeChallengeEntry.key}.steps': newSteps
+    }).catchError((error) {
+      throw Exception("Failed to update challenge status: $error");
+    })
+    .then((value) =>
+        Navigator.pushNamedAndRemoveUntil(
+            context, AppRoutes.dashboard, (route) => false)
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +338,14 @@ class TrackCompletedScreen extends StatelessWidget {
                       const StatsCard(),
                       Space.yf(50),
                       PrimaryButton(
-                        onPressed: () => updatePoints(context),
+                        onPressed: () => {
+                          if(flag == "complete"){
+                            updatePoints(context)
+                          }
+                          else{
+                            updateStepsInActiveChallenge(app.getUserStepCount,context)
+                          },
+                        },
                         child: Text(
                           "Checkout!",
                           style: AppText.h3b.cl(Colors.white),

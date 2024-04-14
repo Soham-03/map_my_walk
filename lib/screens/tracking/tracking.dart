@@ -95,10 +95,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
             await MapUtils.getStepCount(
                 userLocationProvider.userLocation!, data),
             data.speed!);
-        if(userSteps == 0){
-          print(points.toString());
-          //challenge completed
-          Fluttertoast.showToast(msg: "Challenge Completed");
+        if(userSteps == 20){
           if (stream != null) {
             app.setDistanceTraveled(
               MapUtils.getDistance(
@@ -106,18 +103,14 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 lastKnownLocation,
               ),
             );
-
             userLocationProvider.userLocation = lastKnownLocation;
             app.setPolyCoordinates(polylineCoordinates);
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TrackCompletedScreen(points: points.toString()),
+                builder: (context) => TrackCompletedScreen(points: points.toString(), flag:"complete"),
               ),
             );
-            await stream!.cancel().then((value) =>
-                Navigator.pushReplacementNamed(
-                    context, AppRoutes.trackCompleted));
           } else {
             polylines = {};
             startListeningToUserLocation();
@@ -188,6 +181,23 @@ class _TrackingScreenState extends State<TrackingScreen> {
             Align(
               alignment: Alignment.bottomCenter,
               child: _BottomBar(onButtonPress: () async {
+              // if (stream != null) {
+              //   app.setDistanceTraveled(
+              //     MapUtils.getDistance(
+              //       userLocationProvider.userLocation!,
+              //       lastKnownLocation,
+              //     ),
+              //   );
+              //   userLocationProvider.userLocation = lastKnownLocation;
+              //   app.setPolyCoordinates(polylineCoordinates);
+              //   await stream!.cancel().then((value) =>
+              //       Navigator.pushReplacementNamed(
+              //           context, AppRoutes.trackCompleted));
+              // } else {
+              //   polylines = {};
+              //   startListeningToUserLocation();
+              // }
+              // }
                 if (stream != null) {
                   app.setDistanceTraveled(
                     MapUtils.getDistance(
@@ -195,12 +205,14 @@ class _TrackingScreenState extends State<TrackingScreen> {
                       lastKnownLocation,
                     ),
                   );
-
                   userLocationProvider.userLocation = lastKnownLocation;
                   app.setPolyCoordinates(polylineCoordinates);
-                  await stream!.cancel().then((value) =>
-                      Navigator.pushReplacementNamed(
-                          context, AppRoutes.trackCompleted));
+                  await stream!.cancel().then((value) => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TrackCompletedScreen(points: points.toString(), flag: "not completed"),
+                    ),
+                  ));
                 } else {
                   polylines = {};
                   startListeningToUserLocation();

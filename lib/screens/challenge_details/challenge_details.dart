@@ -45,24 +45,50 @@ class ChallengeDetailsScreen extends StatelessWidget {
                   Text('Steps: ${data['steps']}'),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (currentUser != null) {
-                        // Add challengeId to participatedChallenges array in user's document
                         DocumentReference userDocRef = _firestore.collection('users').doc(currentUser.uid);
-                        userDocRef.update({
-                          "participatedChallenges": FieldValue.arrayUnion([challengeId])
-                        }).then((_) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TrackingScreen(steps: steps.toString(), points: points.toString()),
-                            ),
-                          );
-                        }).catchError((error) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Error starting challenge: $error'))
-                          );
-                        });
+                        DocumentSnapshot userDoc = await userDocRef.get();
+                        var userData = userDoc.data();
+                        if (userData is Map<String, dynamic>) {
+                          Map<String, dynamic>? challenges = userData['participatedChallenges'] as Map<String, dynamic>?;
+                          if (challenges != null && challenges.entries.any((e) => e.value['status'] == true && e.key != challengeId)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Already have active challenges')),
+                            );
+                          } else {
+                            if(challenges!.entries.any((element) => element.key == challengeId)){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TrackingScreen(steps: steps.toString(), points: points.toString()),
+                                ),
+                              );
+                            }
+                            else{
+                              // Add or update the challenge in the participatedChallenges map
+                              userDocRef.set({
+                                "participatedChallenges": {
+                                  challengeId: {
+                                    "status": true,
+                                    "steps": "0"
+                                  }
+                                }
+                              }, SetOptions(merge: true)).then((_) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TrackingScreen(steps: steps.toString(), points: points.toString()),
+                                  ),
+                                );
+                              }).catchError((error) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Error starting challenge: $error'))
+                                );
+                              });
+                            }
+                          }
+                        }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('You are not logged in'))
