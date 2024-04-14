@@ -21,10 +21,12 @@ import '../../widgets/primary_button.dart';
 part 'widgets/bottom_bar.dart';
 
 class TrackingScreen extends StatefulWidget {
-  const TrackingScreen({Key? key}) : super(key: key);
+  final String steps; // Accept steps as a String
+  const TrackingScreen({Key? key, required this.steps}) : super(key: key);
 
   @override
   State<TrackingScreen> createState() => _TrackingScreenState();
+
 }
 
 class _TrackingScreenState extends State<TrackingScreen> {
@@ -39,6 +41,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
   LatLng lastKnownLocation = const LatLng(0, 0);
   double bottomPadding = 80;
   int userSteps = 0;
+  int challengeSteps = 0;
   setupMarkerAndCircle(LatLng userLocation) async {
     try {
       lastKnownLocation = userLocation;
@@ -101,6 +104,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
   @override
   void initState() {
     super.initState();
+    challengeSteps = int.parse(widget.steps);
   }
 
   @override

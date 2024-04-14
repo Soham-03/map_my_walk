@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
         ],
         routes: {
           AppRoutes.splash: (context) => const SplashScreen(),
-          AppRoutes.tracking: (context) => const TrackingScreen(),
+          AppRoutes.tracking: (context) => const TrackingScreen(steps: '',),
           AppRoutes.dashboard: (context) => const DashboardScreen(),
           AppRoutes.trackCompleted: (context) => const TrackCompletedScreen(),
           AppRoutes.leaderBoard: (context) => const LeaderBoardScreen(),
@@ -73,8 +73,8 @@ class MyApp extends StatelessWidget {
           AppRoutes.home: (context) => const HomeScreen(),
           AppRoutes.login: (context) => const LoginScreen(),
           AppRoutes.register: (context) => const RegisterScreen(),
-          AppRoutes.challenges: (context) => ChallengesPage(),
-          AppRoutes.fitnessTip: (context) => const FitnessTipScreen(),
+          AppRoutes.challenges: (context) => ChallengesScreen(),
+          AppRoutes.fitnessTip: (context) => FitnessTipScreen(),
           AppRoutes.createChallenge: (context) => const CreateChallengeScreen(),
           AppRoutes.challengeDetail: (context) => const ChallengeDetailScreen(),
           AppRoutes.profile: (context) => ProfilePage()

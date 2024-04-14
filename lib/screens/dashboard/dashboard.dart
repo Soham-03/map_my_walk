@@ -23,9 +23,9 @@ class DashboardScreen extends StatelessWidget {
               delay: const Duration(milliseconds: 200),
               child: FloatingActionButton.extended(
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.tracking);
+                    Navigator.pushNamed(context, AppRoutes.challenges);
                   },
-                  label: const Text("Track Activity!")),
+                  label: const Text("View Challenges")),
             ),
       body: Utils.navBarScreens[appPro.bottomIndex],
       bottomNavigationBar: const BottomNavBar(),
