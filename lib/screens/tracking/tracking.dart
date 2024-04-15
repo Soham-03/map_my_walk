@@ -115,7 +115,6 @@ class _TrackingScreenState extends State<TrackingScreen> {
             polylines = {};
             startListeningToUserLocation();
           }
-
         }
 
         setupMarkerAndCircle(LatLng(data.latitude!, data.longitude!));

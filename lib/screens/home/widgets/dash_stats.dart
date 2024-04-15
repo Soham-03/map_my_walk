@@ -52,12 +52,13 @@ class DashStats extends StatelessWidget {
   }
 
   double getValue(int index) {
+
     switch (index) {
       case 0:
-        return state!.totalCaloriesBurned!.toDouble();
+        return double.parse(app.getAppropriateValue(0));
       case 2:
         // return double.parse(state!.averageSpeed!.toStringAsFixed(1));
-        return app.getSpeed;
+      return double.parse(app.getAppropriateValue(1));
       case 4:
         return double.parse(state!.distanceTraveled!.toStringAsFixed(1));
       default:
