@@ -55,12 +55,12 @@ class DashStats extends StatelessWidget {
 
     switch (index) {
       case 0:
-        return double.parse(app.getAppropriateValue(0));
+        return double.parse(app.getAppropriateValue(1));
       case 2:
         // return double.parse(state!.averageSpeed!.toStringAsFixed(1));
-      return double.parse(app.getAppropriateValue(1));
+      return double.parse(app.getAppropriateValue(2));
       case 4:
-        return double.parse(state!.distanceTraveled!.toStringAsFixed(1));
+        return double.parse(app.getAppropriateValue(0));
       default:
         return 0.0;
     }
