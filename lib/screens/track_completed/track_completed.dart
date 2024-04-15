@@ -227,7 +227,8 @@ class TrackCompletedScreen extends StatelessWidget {
     String challengeId = activeChallengeEntry.key;
     var _steps = participatedChallenges[challengeId];
     var stepsgg = _steps["steps"];
-    newSteps = stepsgg.toInt() + int.parse(app.getUserStepCount.toString());
+    var minestes = stepsgg.toInt() + app.getUserStepCount as int;
+    print("FFF: $minestes");
     // newSteps =  stepsgg.toInt() + ;
     // Update steps in the active challenge
     // await _firestore.collection('challenges').doc(challengeId).update({
@@ -236,7 +237,7 @@ class TrackCompletedScreen extends StatelessWidget {
     //   throw Exception("Failed to update steps: $error");
     // });
     await _firestore.collection('users').doc(userId).update({
-      'participatedChallenges.${activeChallengeEntry.key}.steps': newSteps
+      'participatedChallenges.${activeChallengeEntry.key}.steps': minestes
     }).catchError((error) {
       throw Exception("Failed to update challenge status: $error");
     })
