@@ -227,7 +227,8 @@ class TrackCompletedScreen extends StatelessWidget {
     String challengeId = activeChallengeEntry.key;
     var _steps = participatedChallenges[challengeId];
     var stepsgg = _steps["steps"];
-    var minestes = stepsgg.toInt() + app.getUserStepCount as int;
+    var minestes = stepsgg.toInt() + app.getUserStepCount;
+    print("My: ${app.getUserStepCount}");
     print("FFF: $minestes");
     // newSteps =  stepsgg.toInt() + ;
     // Update steps in the active challenge
