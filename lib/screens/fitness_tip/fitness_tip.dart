@@ -146,7 +146,7 @@ class _FitnessTipScreenState extends State<FitnessTipScreen> {
   Future<void> fetchDietRecommendations(int age, double height, double weight) async {
     setState(() => _isLoading = true);
     final content = [
-      Content.text('Age: $age, Height: $height, Weight: $weight with this info give me diet suggestions both to lose weight and to gain weight')
+      Content.text('Age: $age, Height: $height, Weight: $weight with this info calculate my BMI and show me the score accordingly also show me which category i fall in also give me diet suggestions according to the BMI either to lose weight or gain')
     ];
     try {
       final response = await model.generateContent(content);
