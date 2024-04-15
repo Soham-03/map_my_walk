@@ -152,7 +152,8 @@ import 'widgets/stats_card.dart';
 class TrackCompletedScreen extends StatelessWidget {
   final String points;
   final String flag;
-  const TrackCompletedScreen({Key? key, required this.points, required this.flag}) : super(key: key);
+  late AppProvider app;
+  TrackCompletedScreen({Key? key, required this.points, required this.flag}) : super(key: key);
 
   Future<void> updatePoints(BuildContext context) async {
 
@@ -223,7 +224,6 @@ class TrackCompletedScreen extends StatelessWidget {
     if (activeChallengeEntry.key.isEmpty) {
       throw Exception("No active challenge found");
     }
-    var app = AppProvider();
     String challengeId = activeChallengeEntry.key;
     var _steps = participatedChallenges[challengeId];
     var stepsgg = _steps["steps"];
@@ -252,7 +252,7 @@ class TrackCompletedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     print("object:$points");
     ScreenUtil.init(context, designSize: const Size(428, 926));
-    final app = Provider.of<AppProvider>(context);
+    app = Provider.of<AppProvider>(context);
     return Scaffold(
         body: SafeArea(
           child: Stack(
@@ -345,6 +345,7 @@ class TrackCompletedScreen extends StatelessWidget {
                             updatePoints(context)
                           }
                           else{
+                            print("Stappp: ${app.getUserStepCount}"),
                             updateStepsInActiveChallenge(app.getUserStepCount,context)
                           },
                         },
