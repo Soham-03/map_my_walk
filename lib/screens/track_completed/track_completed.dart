@@ -493,13 +493,15 @@ class TrackCompletedScreen extends StatelessWidget {
     // }).catchError((error) {
     //   throw Exception("Failed to update steps: $error");
     // });
+    var doc = await _firestore.collection('challenges').doc(challengeId).get();
     await _firestore.collection('users').doc(userId).update({
       'participatedChallenges.${activeChallengeEntry.key}.steps': minestes
     }).catchError((error) {
       throw Exception("Failed to update challenge status: $error");
     })
         .then((value) =>{
-          if(stepsgg >= app.getUserStepCount){
+          print("Fuck You:${doc.data()!['steps']}"),
+          if(stepsgg+app.getUserStepCount >= int.parse(doc.data()!['steps'])){
             _firestore.collection('users').doc(userId).update({
               'participatedChallenges.${activeChallengeEntry.key}.status': false
             }).catchError((error) {
