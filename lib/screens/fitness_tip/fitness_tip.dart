@@ -184,7 +184,10 @@ class _FitnessTipScreenState extends State<FitnessTipScreen> {
     ScreenUtil.init(context, designSize: const Size(428, 926));
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("Recommendation"),
+        backgroundColor: Colors.deepPurpleAccent,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

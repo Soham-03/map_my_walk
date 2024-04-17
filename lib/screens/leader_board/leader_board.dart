@@ -20,6 +20,7 @@ class LeaderboardPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Leaderboard'),
+        backgroundColor: Colors.deepPurpleAccent,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance

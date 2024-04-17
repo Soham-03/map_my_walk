@@ -17,6 +17,7 @@ class ChallengeDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Challenge Details'),
+          backgroundColor: Colors.deepPurpleAccent,
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: _firestore.collection('challenges').doc(challengeId).get(),

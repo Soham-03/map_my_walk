@@ -11,6 +11,7 @@ class ChallengesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Available Challenges'),
+          backgroundColor: Colors.deepPurpleAccent,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore.collection('challenges').snapshots(),

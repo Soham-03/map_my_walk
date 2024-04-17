@@ -48,6 +48,8 @@ class _TrackingScreenState extends State<TrackingScreen> {
   int userSteps = 0;
   int challengeSteps = 0;
   int userChallengeSteps = 0;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
 
   int points = 0;
 

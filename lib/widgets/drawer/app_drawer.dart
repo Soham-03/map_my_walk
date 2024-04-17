@@ -60,18 +60,6 @@ class AppDrawer extends StatelessWidget {
               ListTile(
                 minLeadingWidth: 20,
                 leading: const Icon(
-                  Icons.widgets,
-                  color: Colors.white,
-                ),
-                title: Text(
-                  'Challenges',
-                  style: AppText.h2.cl(Colors.white),
-                ),
-                onTap: () => Navigator.pushNamed(context, AppRoutes.challenges),
-              ),
-              ListTile(
-                minLeadingWidth: 20,
-                leading: const Icon(
                   Icons.fastfood_outlined,
                   color: Colors.white,
                 ),
@@ -80,6 +68,18 @@ class AppDrawer extends StatelessWidget {
                   style: AppText.h2.cl(Colors.white),
                 ),
                 onTap: () => Navigator.pushNamed(context, AppRoutes.fitnessTip),
+              ),
+              ListTile(
+                minLeadingWidth: 20,
+                leading: const Icon(
+                  Icons.widgets,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  'Challenges',
+                  style: AppText.h2.cl(Colors.white),
+                ),
+                onTap: () => Navigator.pushNamed(context, AppRoutes.challenges),
               ),
               const Divider(
                 color: Colors.white,
