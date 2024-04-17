@@ -18,7 +18,7 @@ class Animator extends StatefulWidget {
 class AnimatorState extends State<Animator> with SingleTickerProviderStateMixin {
   Timer? timer;
   AnimationController? animationController;
-  Animation? animation;
+  Animation<double>? animation;  // Ensure the animation is typed to match expected usage.
 
   @override
   void initState() {
@@ -31,7 +31,10 @@ class AnimatorState extends State<Animator> with SingleTickerProviderStateMixin 
       parent: animationController!,
       curve: Curves.easeInOut,
     );
-    timer = Timer(widget.time!, () {
+
+    // Delay the timer start to wait for the duration provided by the parent.
+    timer = Timer(widget.time ?? Duration.zero, () {  // Provide a default value if none is given.
+      // Check both mounted and animationController status to ensure safe operation.
       if (mounted && animationController != null && !animationController!.isAnimating) {
         animationController!.forward();
       }
@@ -63,19 +66,6 @@ class AnimatorState extends State<Animator> with SingleTickerProviderStateMixin 
   }
 }
 
-Timer? timer;
-Duration duration = const Duration();
-
-wait() {
-  if (timer == null || !timer!.isActive) {
-    timer = Timer(const Duration(milliseconds: 120), () {
-      duration = const Duration();
-    });
-  }
-  duration += const Duration(milliseconds: 100);
-  return duration;
-}
-
 class WidgetAnimator extends StatelessWidget {
   final Widget child;
 
@@ -84,12 +74,13 @@ class WidgetAnimator extends StatelessWidget {
     required this.child,
   }) : super(key: key);
 
+  // Removed the timer and duration logic from this class.
   @override
   Widget build(BuildContext context) {
     return Animator(
       key: key,
       child: child,
-      time: wait(),
+      time: const Duration(milliseconds: 500), // Set a constant start delay.
     );
   }
 }

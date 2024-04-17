@@ -98,7 +98,7 @@ class MyAppBar extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
                 return Text(
-                  "${snapshot.data}st", // Customize based on the rank
+                  "${snapshot.data} position", // Customize based on the rank
                   style: AppText.h3bm.cl(AppTheme.c.primaryDark!),
                 );
               } else {

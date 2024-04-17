@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +47,31 @@ class _TrackingScreenState extends State<TrackingScreen> {
   double bottomPadding = 80;
   int userSteps = 0;
   int challengeSteps = 0;
+  int userChallengeSteps = 0;
+
   int points = 0;
+
+  void fetchUserChallengeSteps() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;// Replace with the actual user ID.
+
+    final userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final participatedChallenges = userDoc.data()?['participatedChallenges'] as Map<String, dynamic>? ?? {};
+
+    final challengeEntry = participatedChallenges.entries.firstWhere(
+          (entry) => entry.value['status'] == true,
+
+    );
+
+    if (challengeEntry != null) {
+      setState(() {
+        // Assuming 'steps' is stored as an int, otherwise perform necessary type checks/conversion
+        userChallengeSteps = challengeEntry.value['steps'] as int? ?? 0;
+      });
+
+
+    }
+  }
+
   setupMarkerAndCircle(LatLng userLocation) async {
     try {
       lastKnownLocation = userLocation;
@@ -95,7 +121,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
             await MapUtils.getStepCount(
                 userLocationProvider.userLocation!, data),
             data.speed!);
-        if(userSteps == 20){
+        if(userSteps+userChallengeSteps >= challengeSteps){
           if (stream != null) {
             app.setDistanceTraveled(
               MapUtils.getDistance(

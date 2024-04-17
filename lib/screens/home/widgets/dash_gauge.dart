@@ -103,7 +103,18 @@ class _DashGaugeState extends State<DashGauge> {
         // }
 
         int maxSteps = snapshot.data!;
-        return IgnorePointer(
+
+        return maxSteps == null || maxSteps == 0 ?const Center(
+          child: Text(
+            'No Active Challenge',
+            style: TextStyle(
+              fontSize: 24,
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        )
+            : IgnorePointer(
           child: SleekCircularSlider(
             innerWidget: (double percentage) => Center(
                 child: Column(

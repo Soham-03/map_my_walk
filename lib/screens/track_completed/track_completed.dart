@@ -174,7 +174,7 @@ class TrackCompletedScreen extends StatelessWidget {
       // Find the active challenge
       var activeChallengeEntry = participatedChallenges.entries.firstWhere(
             (entry) => entry.value['status'] == true,
-        orElse: () => MapEntry('', {'steps': '0'}),
+        orElse: () => const MapEntry('', {'steps': '0'}),
       );
 
       if (activeChallengeEntry.key.isEmpty) {
@@ -192,7 +192,10 @@ class TrackCompletedScreen extends StatelessWidget {
         }
         int currentPoints = snapshot['points'] ?? 0;
         int newPoints =  currentPoints + int.parse(points);
-        transaction.update(docRef, {'points': newPoints});
+
+        currentPoints >= currentPoints+newPoints?
+        transaction.update(docRef, {'points': newPoints, 'status':false})
+            :transaction.update(docRef, {'points': newPoints});
       }).then((value) {
         Navigator.pushNamedAndRemoveUntil(
             context, AppRoutes.dashboard, (route) => false);
@@ -218,31 +221,32 @@ class TrackCompletedScreen extends StatelessWidget {
     // Find the active challenge
     var activeChallengeEntry = participatedChallenges.entries.firstWhere(
           (entry) => entry.value['status'] == true,
-      orElse: () => MapEntry('', {'steps': '0'}),
+      orElse: () => const MapEntry('', {'steps': '0'}),
     );
 
     if (activeChallengeEntry.key.isEmpty) {
       throw Exception("No active challenge found");
     }
+
     String challengeId = activeChallengeEntry.key;
-    var _steps = participatedChallenges[challengeId];
-    var stepsgg = _steps["steps"];
-    var minestes = stepsgg.toInt() + app.getUserStepCount;
-    print("My: ${app.getUserStepCount}");
-    print("FFF: $minestes");
-    // newSteps =  stepsgg.toInt() + ;
+    dynamic steps = participatedChallenges[challengeId]['steps'];
+    int currentSteps = 0;
+
+    if (steps is String) {
+      currentSteps = int.tryParse(steps) ?? 0;  // Safely parse steps from String to int
+    } else if (steps is int) {
+      currentSteps = steps;
+    }
+
+    int updatedSteps = currentSteps + newSteps;
+
     // Update steps in the active challenge
-    // await _firestore.collection('challenges').doc(challengeId).update({
-    //   'steps': newSteps.toString()
-    // }).catchError((error) {
-    //   throw Exception("Failed to update steps: $error");
-    // });
     await _firestore.collection('users').doc(userId).update({
-      'participatedChallenges.${activeChallengeEntry.key}.steps': minestes
+      'participatedChallenges.$challengeId.steps': updatedSteps
     }).catchError((error) {
       throw Exception("Failed to update challenge status: $error");
     })
-    .then((value) =>
+        .then((value) =>
         Navigator.pushNamedAndRemoveUntil(
             context, AppRoutes.dashboard, (route) => false)
     );

@@ -49,18 +49,20 @@ class ProfilePage extends StatelessWidget {
                 Map<String, dynamic> participatedChallenges = userDoc['participatedChallenges'] as Map<String, dynamic>? ?? {};
 
                 return Column(
+
                   children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(imageUrl),
+                    SizedBox(height: 30),
+                    const CircleAvatar(
+                      radius: 60,
+                      backgroundImage: NetworkImage("https://cdn-icons-png.flaticon.com/512/4721/4721040.png"),
                     ),
                     Text(fullName, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     Text(email, style: TextStyle(fontSize: 16, color: Colors.grey)),
                     UserInfoRow(title: 'Age', value: '$age'),
                     UserInfoRow(title: 'Gender', value: gender),
-                    UserInfoRow(title: 'Height', value: '$height cm'),
+                    UserInfoRow(title: 'Height', value: '$height ft'),
                     UserInfoRow(title: 'Weight', value: '$weight kg'),
-                    UserInfoRow(title: 'Points', value: '$points'),
+                    UserInfoRow(title: 'Points', value: '$points pts'),
                     SizedBox(height: 20),
                     Text('Participated Challenges', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                     ListView.builder(
@@ -111,8 +113,8 @@ class UserInfoRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: TextStyle(fontSize: 18)),
-          Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Text(title, style: const TextStyle(fontSize: 18)),
+          Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         ],
       ),
     );
