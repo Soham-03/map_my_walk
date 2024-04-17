@@ -60,18 +60,25 @@ class ChallengeDetailsScreen extends StatelessWidget {
                           );
                         } else {
                           if (challenges.entries.any((element) => element.key == challengeId)) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TrackingScreen(steps: steps.toString(), points: points.toString()),
-                              ),
-                            );
+                            if(challenges[challengeId]['status'] == false){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Challenge Already Completed')),
+                              );
+                            }
+                            else{
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TrackingScreen(steps: steps.toString(), points: points.toString()),
+                                ),
+                              );
+                            }
                           } else {
                             userDocRef.set({
                               "participatedChallenges": {
                                 challengeId: {
                                   "status": true,
-                                  "steps": "0"
+                                  "steps": 0
                                 }
                               }
                             }, SetOptions(merge: true)).then((_) {

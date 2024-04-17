@@ -21,8 +21,9 @@ class _DashGaugeState extends State<DashGauge> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late Future<int> _targetSteps;
-  late int _currentSteps = 0;  // Initial current steps state
-
+  late int _currentSteps = 0;  //
+  late int challengeSteps; // total steps required to complete challenge
+  late int steps;
   @override
   void initState() {
     super.initState();
@@ -65,8 +66,8 @@ class _DashGaugeState extends State<DashGauge> {
     String challengeId = activeChallengeEntry.key;
     DocumentSnapshot challengeDoc = await _firestore.collection('challenges').doc(challengeId).get();
     if (challengeDoc.exists) {
-      int steps = int.parse(challengeDoc['steps'].toString());
-      return steps;
+      challengeSteps = int.parse(challengeDoc['steps'].toString());
+      return challengeSteps;
     }
 
     return 0;

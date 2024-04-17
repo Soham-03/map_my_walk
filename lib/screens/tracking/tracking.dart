@@ -67,8 +67,6 @@ class _TrackingScreenState extends State<TrackingScreen> {
         // Assuming 'steps' is stored as an int, otherwise perform necessary type checks/conversion
         userChallengeSteps = challengeEntry.value['steps'] as int? ?? 0;
       });
-
-
     }
   }
 
@@ -121,8 +119,11 @@ class _TrackingScreenState extends State<TrackingScreen> {
             await MapUtils.getStepCount(
                 userLocationProvider.userLocation!, data),
             data.speed!);
-        if(userSteps+userChallengeSteps >= challengeSteps){
-          if (stream != null) {
+        var mySteps = userSteps+userChallengeSteps;
+        if(mySteps == challengeSteps){
+          print("Completed Steps: $userSteps");
+          print("User Challenge Steps: $userChallengeSteps");
+          // if (stream != null) {
             app.setDistanceTraveled(
               MapUtils.getDistance(
                 userLocationProvider.userLocation!,
@@ -137,10 +138,10 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 builder: (context) => TrackCompletedScreen(points: points.toString(), flag:"complete"),
               ),
             );
-          } else {
-            polylines = {};
-            startListeningToUserLocation();
-          }
+          // } else {
+          //   // polylines = {};
+          //   // startListeningToUserLocation();
+          // }
         }
 
         setupMarkerAndCircle(LatLng(data.latitude!, data.longitude!));
